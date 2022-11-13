@@ -29,14 +29,14 @@ def predict(folder, classes, model):
     solutions = []
     filenames=[]
     for subdir in os.listdir(folder):
-        # print(subdir)
+        
         
         lst = []
         predictions=[]
-        # print("Sub",subdir)
+        
         filenames.append(subdir)
         for file in os.listdir(f'{folder}{"/"}{subdir}'):
-            # print(subdir,"+",file)
+            
             temp = np.zeros((1,13,216))
             X, sample_rate = librosa.load(os.path.join(f'{folder}{"/"}{subdir}{"/"}', file), res_type='kaiser_fast', duration=2.5, sr=22050*2, offset=0.5)
             mfccs = librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=13)
@@ -45,7 +45,7 @@ def predict(folder, classes, model):
             temp[0] = result
             t = np.expand_dims(temp,axis=3)
             ans=model.predict_classes(t)
-            # print("SOL",classes[ans[0]])
+            
             predictions.append(classes[ans[0]])
 
         if len(predictions) < 2:
@@ -57,7 +57,7 @@ def predict(folder, classes, model):
 if __name__ == '__main__':
     INPUT_FOLDER_PATH = "input/"
     OUTPUT_FOLDER_PATH = "output/"
-    # bk.diarizeFromFolder(INPUT_FOLDER_PATH,OUTPUT_FOLDER_PATH)
+    
     for subdir in os.listdir(INPUT_FOLDER_PATH):
         bk.diarizeFromFolder(f'{INPUT_FOLDER_PATH}{subdir}{"/"}',(f'{OUTPUT_FOLDER_PATH}{subdir}{"/"}'))
         print("Diarized",subdir)
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     folder = OUTPUT_FOLDER_PATH
     for subdir in os.listdir(folder):
         predictions,filenames = predict(f'{folder}{"/"}{subdir}', classes, model)
-        # print("filename:",filenames,",Predictions:",predictions)
+        
         with open('SER_'+subdir+'.csv', 'w') as csvFile:
             writer = csv.writer(csvFile)
             for i in range(len(filenames)):
